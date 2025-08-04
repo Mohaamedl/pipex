@@ -80,10 +80,7 @@ pipex/
 │   └── pipex_bonus_heredoc.c# Here_doc functionality
 │
 ├── 📚 Library
-│   └── libft/               # Custom C library
-│
-└── 🧪 Testing
-    └── tester/              # Test suite
+    └── libft/               # Custom C library
 ```
 
 ## 🔨 Implementation Details
@@ -460,12 +457,10 @@ echo "hello world" | ./pipex /dev/stdin "cat" "wc -w" /dev/stdout
 
 1. **Modular Architecture**: Separated concerns into different files
 2. **Error First**: Comprehensive error handling throughout
-3. **42 Compliance**: Follows 42 school norminette standards
-4. **Library Integration**: Uses libft for proven utility functions
+3. **Library Integration**: Uses libft for proven utility functions
 
 ### Code Quality
 
-- ✅ **Norminette Compliant**: All files pass norminette
 - ✅ **Memory Safe**: No leaks, proper cleanup
 - ✅ **Error Robust**: Handles all error conditions
 - ✅ **Well Documented**: Clear function and variable names
@@ -490,8 +485,4 @@ Potential improvements (beyond project scope):
 - [Unix Pipes Explained](https://www.geeksforgeeks.org/pipe-system-call/)
 - [Process Management in Unix](https://www.tutorialspoint.com/unix/unix-processes.htm)
 
----
 
-**Author**: mhaddadi (42 Porto)  
-**Date**: August 2025  
-**Status**: ✅ All tests passing, norminette compliant
