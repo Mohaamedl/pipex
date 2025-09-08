@@ -5,10 +5,12 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mhaddadi <mhaddadi@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/08/03 15:38:16 by mhaddadi          #+#    #+#             */
-/*   Updated: 2025/08/03 15:39:26 by mhaddadi         ###   ########.fr       */
+/*   Created: 2025/08/17 00:00:00 by mhaddadi          #+#    #+#             */
+/*   Updated: 2025/08/17 00:00:00 by mhaddadi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "libft.h"
 
 int	ft_isspace(int c)
 {
