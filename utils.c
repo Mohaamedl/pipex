@@ -27,9 +27,9 @@ void	ft_free_tab(char **tab)
 	free(tab);
 }
 
-void	exit_error(char *msg)
+void	exit_error(void)
 {
-	perror(msg);
+	perror("\033[31mError");
 	exit(EXIT_FAILURE);
 }
 

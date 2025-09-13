@@ -16,10 +16,10 @@ void	child_process(char **av, int *p_fd, char **env)
 {
 	int	fd;
 
-	fd = open(av[1], O_RDONLY);
+	fd = open(av[1], O_RDONLY, 0777);
 	if (fd == -1)
 	{
-		perror("pipex: infile");
+		perror("\033[31mError");
 		exit(1);
 	}
 	dup2(fd, STDIN_FILENO);
@@ -34,9 +34,9 @@ void	parent_process(char **av, int *p_fd, char **env)
 {
 	int	fd;
 
-	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd == -1)
-		exit_error("pipex: outfile");
+		exit_error();
 	dup2(fd, STDOUT_FILENO);
 	dup2(p_fd[0], STDIN_FILENO);
 	close(p_fd[0]);
@@ -53,15 +53,15 @@ int	main(int ac, char **av, char **env)
 	if (ac != 5)
 	{
 		ft_putendl_fd("Usage: ./pipex infile cmd1 cmd2 outfile", 2);
-		exit(EXIT_FAILURE);
 	}
 	if (pipe(p_fd) == -1)
-		exit_error("pipe");
+		exit_error();
 	pid = fork();
 	if (pid == -1)
-		exit_error("fork");
+		exit_error();
 	if (pid == 0)
 		child_process(av, p_fd, env);
+	waitpid(pid, NULL, 0);
 	parent_process(av, p_fd, env);
 	return (0);
 }

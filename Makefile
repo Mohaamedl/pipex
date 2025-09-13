@@ -12,7 +12,7 @@
 
 # Program names
 NAME = pipex
-NAME_BONUS = pipex_bonus
+NAME_BONUS = pipex
 
 # Source files
 SRCS = pipex.c utils.c path.c

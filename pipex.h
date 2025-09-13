@@ -22,7 +22,7 @@
 # include "libft/inc/libft.h"
 
 void	ft_free_tab(char **tab);
-void	exit_error(char *msg);
+void	exit_error(void);
 char	*my_getenv(char *name, char **env);
 void	exec(char *cmd, char **env);
 void	child_process(char **av, int *p_fd, char **env);

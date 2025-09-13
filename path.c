@@ -87,7 +87,10 @@ void	exec(char *cmd, char **env)
 	}
 	path = get_path(s_cmd[0], env);
 	if (!path)
+	{
 		handle_exec_error(s_cmd, NULL);
+		exit(1);
+	}
 	if (execve(path, s_cmd, env) == -1)
 		handle_exec_error(s_cmd, path);
 }
