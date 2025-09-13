@@ -24,6 +24,7 @@
 void	ft_free_tab(char **tab);
 void	exit_error(void);
 char	*my_getenv(char *name, char **env);
+char	**parse_command(char *cmd);
 void	exec(char *cmd, char **env);
 void	child_process(char **av, int *p_fd, char **env);
 void	parent_process(char **av, int *p_fd, char **env);

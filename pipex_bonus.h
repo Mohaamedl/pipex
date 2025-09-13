@@ -21,7 +21,7 @@
 # include "libft/inc/get_next_line.h"
 # include "libft/inc/libft.h"
 
-char	**split_args(char *cmd);
+char	**parse_command(char *cmd);
 void	ft_free_tab(char **tab);
 
 void	exit_handler(int n_exit);

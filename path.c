@@ -34,22 +34,13 @@ static char	*find_executable(char **allpath, char *cmd)
 static char	*search_in_path(char *cmd, char **env)
 {
 	char	**allpath;
-	char	**s_cmd;
 	char	*result;
 
 	allpath = ft_split(my_getenv("PATH", env), ':');
 	if (!allpath)
 		return (NULL);
-	s_cmd = ft_split(cmd, ' ');
-	if (!s_cmd || !s_cmd[0])
-	{
-		ft_free_tab(allpath);
-		ft_free_tab(s_cmd);
-		return (NULL);
-	}
-	result = find_executable(allpath, s_cmd[0]);
+	result = find_executable(allpath, cmd);
 	ft_free_tab(allpath);
-	ft_free_tab(s_cmd);
 	return (result);
 }
 
@@ -78,7 +69,7 @@ void	exec(char *cmd, char **env)
 	char	**s_cmd;
 	char	*path;
 
-	s_cmd = ft_split(cmd, ' ');
+	s_cmd = parse_command(cmd);
 	if (!s_cmd || !s_cmd[0])
 	{
 		ft_putendl_fd("pipex: invalid command", 2);
@@ -87,10 +78,7 @@ void	exec(char *cmd, char **env)
 	}
 	path = get_path(s_cmd[0], env);
 	if (!path)
-	{
 		handle_exec_error(s_cmd, NULL);
-		exit(1);
-	}
 	if (execve(path, s_cmd, env) == -1)
 		handle_exec_error(s_cmd, path);
 }
