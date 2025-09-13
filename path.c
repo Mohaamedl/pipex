@@ -12,7 +12,7 @@
 
 #include "pipex.h"
 
-char	*find_executable(char **allpath, char *cmd)
+static char	*find_executable(char **allpath, char *cmd)
 {
 	int		i;
 	char	*exec;
@@ -31,7 +31,7 @@ char	*find_executable(char **allpath, char *cmd)
 	return (NULL);
 }
 
-char	*search_in_path(char *cmd, char **env)
+static char	*search_in_path(char *cmd, char **env)
 {
 	char	**allpath;
 	char	**s_cmd;
@@ -53,7 +53,7 @@ char	*search_in_path(char *cmd, char **env)
 	return (result);
 }
 
-char	*get_path(char *cmd, char **env)
+static char	*get_path(char *cmd, char **env)
 {
 	char	*result;
 
