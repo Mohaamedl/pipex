@@ -52,6 +52,7 @@ int	main(int ac, char **av, char **env)
 {
 	int		p_fd[2];
 	pid_t	pid;
+	int		status;
 
 	if (ac != 5)
 	{
@@ -66,7 +67,7 @@ int	main(int ac, char **av, char **env)
 	if (pid == 0)
 		child_process(av, p_fd, env);
 	close(p_fd[1]);
-	waitpid(pid, NULL, 0);
 	parent_process(av, p_fd, env);
-	return (0);
+	waitpid(pid, &status, 0);
+	return (WEXITSTATUS(status));
 }
