@@ -16,7 +16,7 @@ NAME_BONUS = pipex_bonus
 
 # Source files
 SRCS = pipex.c utils.c path.c cmd_parse.c
-SRCS_BONUS = pipex_bonus.c pipex_bonus_utils.c pipex_bonus_heredoc.c utils.c path.c cmd_parse.c
+SRCS_BONUS = pipex_bonus.c pipex_utils_bonus.c pipex_heredoc_bonus.c utils.c path.c cmd_parse.c
 
 # Compiler and flags
 CC = cc
