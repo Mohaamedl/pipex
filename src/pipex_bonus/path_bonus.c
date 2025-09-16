@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../../include/pipex_bonus.h"
 
 static char	*find_executable(char **allpath, char *cmd)
 {
