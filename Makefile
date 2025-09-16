@@ -9,80 +9,76 @@
 #    Updated: 2025/08/04 20:30:00 by mhaddadi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
-# TODO: add makegoals to complite bonus part with the same name
-# Program names
-NAME = pipex
-NAME_BONUS = pipex
+PROG	= pipex
+PROG_B  = pipex_bonus
 
-SRCS_DIR = src/pipex
-SRCS_BONUS_DIR =src/pipex_bonus
-RM = rm -rf
-# Source files
-SRCS = $(SRCS_DIR)/pipex.c \
-			  $(SRCS_DIR)/utils.c \
-			  $(SRCS_DIR)/path.c \
-			  $(SRCS_DIR)/cmd_parse.c
+SRCS 	= src/pipex/pipex.c \
+				src/pipex/utils.c \
+				src/pipex/path.c \
+				src/pipex/cmd_parse.c
 
-SRCS_BONUS = $(SRCS_BONUS_DIR)/pipex_bonus.c \
-						 $(SRCS_BONUS_DIR)/pipex_utils_bonus.c \
-						 $(SRCS_BONUS_DIR)/pipex_heredoc_bonus.c \
-						 $(SRCS_BONUS_DIR)/utils.c \
-						 $(SRCS_BONUS_DIR)/path.c \
-						 $(SRCS_BONUS_DIR)/cmd_parse.c
+OBJS 	= ${SRCS:.c=.o}
+MAIN	= src/pipex/pipex.c
 
-BUILD_DIR = build
+SRCS_B	= src/pipex_bonus/pipex_bonus.c \
+					src/pipex_bonus/utils_bonus.c \
+					src/pipex_bonus/path_bonus.c \
+					src/pipex_bonus/cmd_parse_bonus.c \
+					src/pipex_bonus/heredoc_bonus.c \
+					src/pipex/utils.c
+OBJS_B	= ${SRCS_B:.c=.o}
+MAIN_B	= src/pipex_bonus/pipex_bonus.c
 
-# Compiler and flags
-CC = cc
-CFLAGS = -Wall -Wextra -Werror
+HEADER	= -Iincludes
 
-# Library settings
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
+CC 		= cc
+CFLAGS 	= -Wall -Wextra -Werror -g
 
+.c.o:		%.o : %.c
+					@gcc ${CFLAGS} ${HEADER} -c $< -o $(<:.c=.o)
 
-OBJS = $(SRCS:$(SRCS_DIR)%.c=$(BUILD_DIR)/%.o)
-OBJS_BONUS = $(SRCS_BONUS:$(SRCS_BONUS_DIR)/%.c=$(BUILD_DIR)/%.o)
+all: 		${PROG}
 
-# Default target
-create_dirs:
-	@mkdir -p build/pipex
-	@mkdir -p build/pipex_bonus
+${PROG}:	${OBJS}
+					@echo "\033[33m----Compiling lib----"
+					@make re -C ./libft
+					@$(CC) ${OBJS} -Llibft -lft -o ${PROG}
+					@echo "\033[32mPipex Compiled! ᕦ(\033[31m♥\033[32m_\033[31m♥\033[32m)ᕤ\n"
 
 
-# Targets
-all: $(NAME)
+bonus:		${PROG_B}
 
-$(NAME): create_dirs $(OBJS)
-	$(MAKE) -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) $(OBJS) -L$(LIBFT_DIR) -lft -o $(NAME)
-
-# Compile .c to .o in build/
-$(BUILD_DIR)/%.o: $(SRCS_DIR)/%.c | $(BUILD_DIR)
-	$(CC) $(CFLAGS) -I$(LIBFT_DIR) -c $< -o $@
-
-bonus: $(BONUS_NAME)
-
-$(BONUS_NAME): create_dirs $(OBJS_BONUS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS_BONUS) -L$(LIBFT_DIR) -lft -o $(BONUS_NAME)
-
-
-$(BUILD_DIR):
-	mkdir -p $(BUILD_DIR)
-
-$(LIBFT):
-	$(MAKE) -C $(LIBFT_DIR)
+${PROG_B}:	${OBJS_B}
+					@echo "\033[33m----Compiling lib----"
+					@make re -C ./libft
+					@$(CC) ${OBJS_B} -Llibft -lft -o ${PROG_B}
+					@echo "\033[32mPipex Bonus Compiled! ᕦ(\033[31m♥\033[32m_\033[31m♥\033[32m)ᕤ\n"
 
 clean:
-	$(RM) $(BUILD_DIR)
-	$(MAKE) -C $(LIBFT_DIR) clean
+					@make clean -C ./libft
+					@rm -f ${OBJS} ${OBJS_B}
 
-fclean: clean
-	$(RM) $(NAME) $(NAME_BONUS)
-	$(MAKE) -C $(LIBFT_DIR) fclean
+fclean: 	clean
+					@make fclean -C ./libft
+					@rm -f $(NAME)
+					@rm -f ${PROG}
+					@echo "\n\033[31mDeleting EVERYTHING! ⌐(ಠ۾ಠ)¬\n"
 
-re: fclean all
+re:			fclean all
 
+re_bonus:	fclean bonus
 
-.PHONY: all clean fclean re bonus
+party:
+					@printf "\033c"
+					@echo "\n\033[35m♪┏(・o･)┛♪"
+					@sleep 1
+					@printf "\033c"
+					@echo "\033[1;33m♪┗(・o･)┓♪"
+					@sleep 1
+					@printf "\033c"
+					@echo "\n\033[36m♪┏(・o･)┛♪"
+					@sleep 1
+					@printf "\033c"
+					@echo "\033[34m♪┗(・o･)┓♪\n"
 
+.PHONY: all clean fclean re re_bonus bonus party
