@@ -43,7 +43,6 @@ void	parent_process(char **av, int *p_fd, char **env)
 	dup2(fd, STDOUT_FILENO);
 	dup2(p_fd[0], STDIN_FILENO);
 	close(p_fd[0]);
-	close(p_fd[1]);
 	close(fd);
 	exec(av[3], env);
 }
@@ -66,8 +65,11 @@ int	main(int ac, char **av, char **env)
 		exit_error();
 	if (pid == 0)
 		child_process(av, p_fd, env);
-	close(p_fd[1]);
-	parent_process(av, p_fd, env);
-	waitpid(pid, &status, 0);
-	return (WEXITSTATUS(status));
+	else
+	{
+		close(p_fd[1]);
+		waitpid(pid, &status, 0);
+		parent_process(av, p_fd, env);
+	}
+	return (0);
 }
