@@ -15,7 +15,7 @@
 void	exit_handler(int n_exit)
 {
 	if (n_exit == 1)
-		ft_putstr_fd("./pipex_bonus infile cmd cmd outfile\n", 2);
+		ft_putstr_fd("./pipex infile (here_doc) cmd1 cmd2 ... outfile\n", 2);
 	exit(0);
 }
 
@@ -30,7 +30,10 @@ int	open_file(char *file, int in_or_out)
 	if (in_or_out == 2)
 		ret = open(file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (ret == -1)
-		exit(0);
+	{
+		perror(file);
+		exit(1);
+	}
 	return (ret);
 }
 

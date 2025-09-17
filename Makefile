@@ -22,6 +22,7 @@ ifeq ($(filter bonus,$(MAKECMDGOALS)),bonus)
            src/pipex_bonus/cmd_parse_bonus.c \
            src/pipex_bonus/heredoc_bonus.c
     COMPILE_TYPE = "Bonus"
+    TYPE_FILE = .bonus_build
 else
     # Mandatory sources  
     SRCS = src/pipex/pipex.c \
@@ -29,6 +30,7 @@ else
            src/pipex/path.c \
            src/pipex/cmd_parse.c
     COMPILE_TYPE = "Mandatory"
+    TYPE_FILE = .mandatory_build
 endif
 
 # Build directory for object files
@@ -42,9 +44,16 @@ CFLAGS = -Wall -Wextra -Werror -g
 
 LIBFT = libft/libft.a
 
-all: ${LIBFT} ${NAME}
+all: ${LIBFT} check_type ${NAME}
 
-bonus: ${LIBFT} ${NAME}
+bonus: ${LIBFT} check_type ${NAME}
+
+# Check if build type changed and force rebuild if needed
+check_type:
+	@if [ ! -f $(TYPE_FILE) ]; then \
+		rm -f .mandatory_build .bonus_build $(NAME); \
+		touch $(TYPE_FILE); \
+	fi
 
 ${NAME}: ${OBJS} ${LIBFT}
 	@$(CC) ${OBJS} -Llibft -lft -o ${NAME}
@@ -73,7 +82,7 @@ clean:
 
 fclean: clean
 	@make fclean -C ./libft
-	@rm -f ${NAME}
+	@rm -f ${NAME} .mandatory_build .bonus_build
 	@echo "\n\033[31mDeleting EVERYTHING! ⌐(ಠ۾ಠ)¬\n"
 
 re: fclean all
@@ -126,4 +135,4 @@ vhelp:
 	@echo "\033[36m  make vtest ARGS='...'\033[0m - Custom test"
 	@echo "\033[33m  Example: make vtest ARGS='input.txt \"ls -l\" \"wc -l\" output.txt'\033[0m"
 
-.PHONY: all clean fclean re re_bonus bonus party valgrind vfull vtest vbonus vquick vhelp
+.PHONY: all clean fclean re re_bonus bonus party valgrind vfull vtest vbonus vquick vhelp check_type

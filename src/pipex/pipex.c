@@ -16,11 +16,19 @@ void	child_process(char **av, int *p_fd, char **env)
 {
 	int	fd;
 
-	fd = open(av[1], O_RDONLY);
-	if (fd == -1)
+	if (access(av[1], R_OK) != 0)
 	{
 		perror(av[1]);
-		exit(1);
+		fd = open("/dev/null", O_RDONLY);
+	}
+	else
+	{
+		fd = open(av[1], O_RDONLY);
+		if (fd == -1)
+		{
+			perror(av[1]);
+			fd = open("/dev/null", O_RDONLY);
+		}
 	}
 	dup2(fd, STDIN_FILENO);
 	dup2(p_fd[1], STDOUT_FILENO);
@@ -32,26 +40,33 @@ void	child_process(char **av, int *p_fd, char **env)
 
 void	parent_process(char **av, int *p_fd, char **env)
 {
-	int	fd;
+	dup2(p_fd[0], STDIN_FILENO);
+	close(p_fd[0]);
+	exec(av[3], env);
+}
 
-	fd = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+void	handle_parent_process(char **av, int *p_fd, char **env)
+{
+	int		status;
+	int		fd_out;
+
+	close(p_fd[1]);
+	waitpid(-1, &status, 0);
+	fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd_out == -1)
 	{
 		perror(av[4]);
 		exit(1);
 	}
-	dup2(fd, STDOUT_FILENO);
-	dup2(p_fd[0], STDIN_FILENO);
-	close(p_fd[0]);
-	close(fd);
-	exec(av[3], env);
+	dup2(fd_out, STDOUT_FILENO);
+	close(fd_out);
+	parent_process(av, p_fd, env);
 }
 
 int	main(int ac, char **av, char **env)
 {
 	int		p_fd[2];
 	pid_t	pid;
-	int		status;
 
 	if (ac != 5)
 	{
@@ -66,10 +81,6 @@ int	main(int ac, char **av, char **env)
 	if (pid == 0)
 		child_process(av, p_fd, env);
 	else
-	{
-		close(p_fd[1]);
-		waitpid(pid, &status, 0);
-		parent_process(av, p_fd, env);
-	}
+		handle_parent_process(av, p_fd, env);
 	return (0);
 }

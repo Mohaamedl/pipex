@@ -47,13 +47,22 @@ static void	handle_here_doc_mode(int ac, char **av, int *fd_out, int *i)
 	here_doc(av);
 }
 
-static void	handle_normal_mode(char **av, int ac, int *fd_out, int *i)
+static void	handle_normal_mode(int ac, char **av, int *fd_out, int *i)
 {
 	int	fd_in;
 
 	*i = 2;
-	fd_in = open_file(av[1], 0);
-	*fd_out = open_file(av[ac - 1], 1);
+	if (ac == 5)
+		*fd_out = -1;
+	else
+		*fd_out = open_file(av[ac - 1], 1);
+	if (access(av[1], R_OK) != 0)
+	{
+		perror(av[1]);
+		fd_in = open("/dev/null", O_RDONLY);
+	}
+	else
+		fd_in = open_file(av[1], 0);
 	dup2(fd_in, 0);
 	close(fd_in);
 }
@@ -68,9 +77,18 @@ int	main(int ac, char **av, char **env)
 	if (ft_strncmp(av[1], "here_doc", 8) == 0)
 		handle_here_doc_mode(ac, av, &fd_out, &i);
 	else
-		handle_normal_mode(av, ac, &fd_out, &i);
+		handle_normal_mode(ac, av, &fd_out, &i);
 	while (i < ac - 2)
 		do_pipe(av[i++], env);
+	if (ac == 5)
+	{
+		fd_out = open(av[ac - 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd_out == -1)
+		{
+			perror(av[ac - 1]);
+			exit(1);
+		}
+	}
 	dup2(fd_out, 1);
 	close(fd_out);
 	exec(av[ac - 2], env);
