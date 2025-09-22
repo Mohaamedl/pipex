@@ -47,11 +47,9 @@ void	parent_process(char **av, int *p_fd, char **env)
 
 void	handle_parent_process(char **av, int *p_fd, char **env)
 {
-	int		status;
 	int		fd_out;
 
 	close(p_fd[1]);
-	waitpid(-1, &status, 0);
 	fd_out = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd_out == -1)
 	{
